@@ -1,0 +1,14 @@
+{
+  "name": "devkitplus",
+  "description": "Various tools of varying degree of usefulness.",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.js",
+  "vendetta": {
+    "icon": "ic_staff"
+  }
+}

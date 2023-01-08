@@ -1,0 +1,14 @@
+{
+  "name": "Picture Links",
+  "description": "Link's pictures.",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.jsx",
+  "vendetta": {
+    "icon": "ic_link"
+  }
+}

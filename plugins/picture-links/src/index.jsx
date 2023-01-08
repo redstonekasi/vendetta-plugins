@@ -27,6 +27,7 @@ function openModal(uri, event) {
 }
 
 const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style }], res) => {
+  window.a=user
   const image = user?.getAvatarURL?.(false, 4096, true);
   if (!image) return res;
 
@@ -39,7 +40,7 @@ const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style }], res) =>
   delete res.props.style;
 
   return (
-    <Pressable onPress={({ nativeEvent }) => openModal(url, nativeEvent)} style={style} ref={sizeRef}>
+    <Pressable onPress={({ nativeEvent }) => openModal(url, nativeEvent)} style={style}>
       {res}
     </Pressable>
   );

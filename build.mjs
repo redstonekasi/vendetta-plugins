@@ -8,40 +8,40 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 
 for (let plug of await readdir("./plugins")) {
-    const manifest = JSON.parse(await readFile(`./plugins/${plug}/manifest.json`));
-    const outName = manifest.main.split("/").reverse()[0];
-    const outPath = `./dist/${plug}/${outName}`;
+  const manifest = JSON.parse(await readFile(`./plugins/${plug}/manifest.json`));
+  const outName = manifest.main.split("/").reverse()[0];
+  const outPath = `./dist/${plug}/${outName}`;
 
-    try {
-        const bundle = await rollup({
-            input: `./plugins/${plug}/${manifest.main}`,
-            onwarn: () => {},
-            plugins: [
-                nodeResolve(),
-                commonjs(),
-                esbuild({
-                    target: "esnext",
-                    minify: true,
-                })
-            ],
-        });
-    
-        await bundle.write({
-            file: outPath,
-            format: "iife",
-            compact: true,
-            exports: "named",
-        });
-        await bundle.close();
-    
-        const toHash = await readFile(outPath);
-        manifest.hash = createHash("sha256").update(toHash).digest("hex");
-        manifest.main = outName;
-        await writeFile(`./dist/${plug}/manifest.json`, JSON.stringify(manifest));
-    
-        console.log(`Successfully built ${manifest.name}!`);
-    } catch (e) {
-        console.error("Failed to build plugin...", e);
-        process.exit(1);
-    }
+  try {
+    const bundle = await rollup({
+      input: `./plugins/${plug}/${manifest.main}`,
+      onwarn: () => {},
+      plugins: [
+        nodeResolve(),
+        commonjs(),
+        esbuild({
+          target: "esnext",
+          minify: true,
+        }),
+      ],
+    });
+
+    await bundle.write({
+      file: outPath,
+      format: "iife",
+      compact: true,
+      exports: "named",
+    });
+    await bundle.close();
+
+    const toHash = await readFile(outPath);
+    manifest.hash = createHash("sha256").update(toHash).digest("hex");
+    manifest.main = outName;
+    await writeFile(`./dist/${plug}/manifest.json`, JSON.stringify(manifest));
+
+    console.log(`Successfully built ${manifest.name}!`);
+  } catch (e) {
+    console.error("Failed to build plugin...", e);
+    process.exit(1);
+  }
 }

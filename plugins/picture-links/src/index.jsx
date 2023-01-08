@@ -21,20 +21,26 @@ function openModal(uri, event) {
         },
       ],
       initialIndex: 0,
-      originLayout: { width: 0, height: 0, x: event.pageX, y: event.pageY, resizeMode: "center" },
+      originLayout: {
+        width: 0, // this would ideally be the size of the small pfp but this proved very hard to implement
+        height: 0,
+        x: event.pageX,
+        y: event.pageY,
+        resizeMode: "center",
+      },
     }),
   );
 }
 
-const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style }], res) => {
-  window.a=user
-  const image = user?.getAvatarURL?.(false, 4096, true);
+const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style, guildId }], res) => {
+  const image = user.guildMemberAvatars?.[guildId]
+    ? `https://cdn.discordapp.com/guilds/${guildId}/users/${user.id}/avatars/${user.guildMemberAvatars[guildId]}.png`
+    : user?.getAvatarURL?.(false, 4096, true);
   if (!image) return res;
 
-  const discrim = user.discriminator % 5;
   const url =
     typeof image === "number"
-      ? `https://cdn.discordapp.com/embed/avatars/${discrim}.png`
+      ? `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`
       : image?.replace(".webp", ".png");
 
   delete res.props.style;

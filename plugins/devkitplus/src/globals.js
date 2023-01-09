@@ -6,6 +6,8 @@ const apply = {
   ...vendetta.debug,
 };
 
+delete apply["React"];
+
 Object.assign(window, apply);
 
 export default () => Object.keys(apply).forEach((k) => delete window[k]);

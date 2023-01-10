@@ -34,9 +34,8 @@ function openModal(uri, event) {
 }
 
 const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style, guildId }], res) => {
-  const image = user.guildMemberAvatars?.[guildId]
-    ? `https://cdn.discordapp.com/guilds/${guildId}/users/${user.id}/avatars/${user.guildMemberAvatars[guildId]}.png`
-    : user?.getAvatarURL?.(false, 4096, true);
+  const guildSpecific = user.guildMemberAvatars?.[guildId] && `https://cdn.discordapp.com/guilds/${guildId}/users/${user.id}/avatars/${user.guildMemberAvatars[guildId]}.png`;
+  const image = user?.getAvatarURL?.(false, 4096, true);
   if (!image) return res;
 
   const url =
@@ -47,7 +46,10 @@ const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style, guildId }]
   delete res.props.style;
 
   return (
-    <Pressable onPress={({ nativeEvent }) => openModal(url, nativeEvent)} style={style}>
+    <Pressable
+      onPress={({ nativeEvent }) => openModal(url, nativeEvent)}
+      onLongPress={({ nativeEvent }) => guildSpecific && openModal(guildSpecific, nativeEvent)}
+      style={style}>
       {res}
     </Pressable>
   );

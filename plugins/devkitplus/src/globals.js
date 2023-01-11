@@ -1,13 +1,22 @@
-const apply = {
-  ...vendetta.patcher,
-  ...vendetta.metro,
-  ...vendetta.metro.common,
-  ...vendetta.utils,
-  ...vendetta.debug,
-};
+const patch = () => {
+  const apply = {
+    ...vendetta.patcher,
+    ...vendetta.metro,
+    ...vendetta.metro.common,
+    ...vendetta.utils,
+    ...vendetta.debug,
+  };
 
-delete apply["React"];
+  delete apply["React"];
 
-Object.assign(window, apply);
+  Object.assign(window, apply);
 
-export default () => Object.keys(apply).forEach((k) => delete window[k]);
+  return () => Object.keys(apply).forEach((k) => delete window[k]);
+}
+
+let unpatch;
+
+export default (on = true) => {
+  unpatch?.();
+  if (on) unpatch = patch();
+}

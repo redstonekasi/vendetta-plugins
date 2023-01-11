@@ -1,13 +1,14 @@
-// gonna make this configurable later
+const { storage } = vendetta.plugin;
 
-if (window.__vendetta_rdc) {
+// this is only run once since you'd permanently have the annoying toasts if it didn't
+if (storage.autoDebugger)
+  vendetta.debug.connectToDebugger(vendetta.settings.debuggerUrl);
+
+if (storage.autoRDC && window.__vendetta_rdc) {
   const { StyleSheet } = vendetta.metro.common.ReactNative;
   
   window.__vendetta_rdc.connectToDevTools({
-    host: "10.0.0.12",
+    host: vendetta.settings.debuggerUrl.split(":")[0],
     resolveRNStyle: StyleSheet.flatten,
   });
 }
-
-// this is only run once since you'd permanently have the annoying toasts if it didn't
-vendetta.debug.connectToDebugger("10.0.0.12:9090");

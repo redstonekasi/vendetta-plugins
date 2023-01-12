@@ -1,0 +1,14 @@
+{
+  "name": "URL import",
+  "description": "Allows you to install plugins directly from a URL's action sheet.",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.js",
+  "vendetta": {
+    "icon": "ic_link"
+  }
+}

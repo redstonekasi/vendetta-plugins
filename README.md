@@ -14,3 +14,8 @@ Some useful features for making development easier, currently:
   [here](https://github.com/redstonekasi/vendetta-plugins/blob/main/plugins/devkitplus/globals.js)
   for a list)
 - Auto-connecting to debugger websocket (and React DevTools if you have that)
+
+## URL import
+
+`https://redstonekasi.github.io/vendetta-plugins/url-import`  
+Allows you to install plugins directly from a URL's action sheet.

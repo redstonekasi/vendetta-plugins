@@ -4,8 +4,8 @@ const { showToast } = vendetta.ui.toasts;
 const { getAssetIDByName } = vendetta.ui.assets;
 
 const unpatch = before("openLazy", ActionSheet, (args) => {
-  const [, name, { header: { title: url }, options }] = args;
   if (name !== "LongPressUrl") return;
+  const [, name, { header: { title: url }, options }] = args;
 
   options.push({
     label: "Install plugin",

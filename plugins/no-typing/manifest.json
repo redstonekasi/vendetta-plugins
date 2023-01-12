@@ -1,0 +1,14 @@
+{
+  "name": "No typing",
+  "description": "Hides your typing status from others.",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.js",
+  "vendetta": {
+    "icon": "ic_chat_bubble_16px"
+  }
+}

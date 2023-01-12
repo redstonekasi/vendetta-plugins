@@ -1,6 +1,6 @@
 const { storage } = vendetta.plugin;
 
-function apply() {
+export default () => {
   // this is only run once since you'd permanently have the annoying toasts if it didn't
   if (storage.autoDebugger)
     vendetta.debug.connectToDebugger(vendetta.settings.debuggerUrl);

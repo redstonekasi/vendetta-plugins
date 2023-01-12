@@ -1,5 +1,5 @@
 import globals from "./globals";
-import "./socket";
+import socket from "./socket";
 
 const { Platform } = vendetta.metro.common.ReactNative;
 const { storage } = vendetta.plugin;
@@ -10,6 +10,7 @@ storage.autoDebugger ??= true;
 storage.autoRDC ??= Platform.OS === "android";
 
 globals(storage.assignGlobals);
+socket();
 
 export const onUnload = () => {
   globals(false);

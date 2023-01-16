@@ -6,13 +6,13 @@ const { getSize } = vendetta.metro.common.ReactNative.Image;
 const { Pressable } = findByProps("Button", "Text", "View");
 const ProfileBanner = findByDisplayName("ProfileBanner", false);
 const HeaderAvatar = findByDisplayName("HeaderAvatar", false);
-const { openMediaModal } = vendetta.metro.findByDisplayName("MediaModal", false);
+const GuildIcon = findByDisplayName("GuildIcon");
+const { openMediaModal } = findByDisplayName("MediaModal", false);
 const { hideActionSheet } = findByProps("hideActionSheet");
 
 function openModal(uri, event) {
-  hideActionSheet(); // hide user sheet
-
-  getSize(uri, (width, height) =>
+  getSize(uri, (width, height) => {
+    hideActionSheet(); // hide user sheet
     openMediaModal({
       initialSources: [
         {
@@ -27,10 +27,10 @@ function openModal(uri, event) {
         height: 0,
         x: event.pageX,
         y: event.pageY,
-        resizeMode: "center",
+        resizeMode: "fill",
       },
-    }),
-  );
+    });
+  });
 }
 
 const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style, guildId }], res) => {
@@ -65,7 +65,20 @@ const unpatchBanner = after("default", ProfileBanner, ([{ bannerSource }], res) 
   return <Pressable onPress={({ nativeEvent }) => openModal(url, nativeEvent)}>{res}</Pressable>;
 });
 
+const unpatchGuildIcon = after("render", GuildIcon.prototype, function (_, res) {
+  if (this.props?.size !== "XLARGE") return;
+  const url = this.props?.guild?.getIconURL?.(4096);
+  if (!url) return res;
+
+  return (
+    <Pressable onPress={({ nativeEvent }) => openModal(url, nativeEvent)}>
+      {res}
+    </Pressable>
+  );
+});
+
 export function onUnload() {
   unpatchAvatar();
   unpatchBanner();
+  unpatchGuildIcon();
 }

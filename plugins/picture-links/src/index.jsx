@@ -17,6 +17,7 @@ function openModal(uri, event) {
       initialSources: [
         {
           uri,
+          sourceURI: uri,
           width,
           height,
         },

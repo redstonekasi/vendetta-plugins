@@ -11,11 +11,11 @@ export default () => {
   const [autoRDC, setAutoRDC] = React.useState(storage.autoRDC);
 
   return (
-    <ReactNative.View>
+    <ReactNative.ScrollView>
       <FormSwitchRow
         label="Assign globals"
         subLabel="Assign modules, utils, patcher to window"
-        leading={<FormIcon source={getAssetIDByName("ic_message_copy")}/>}
+        leading={<FormIcon source={getAssetIDByName("ic_message_copy")} />}
         onValueChange={(v) => {
           setAssignGlobals(v)
           globals(v);
@@ -26,17 +26,18 @@ export default () => {
       <FormSwitchRow
         label="Auto debugger"
         subLabel="Automatically connect to debugger on launch"
-        leading={<FormIcon source={getAssetIDByName("copy")}/>}
+        leading={<FormIcon source={getAssetIDByName("copy")} />}
         onValueChange={setAutoDebugger}
         value={autoDebugger}
       />
+      <FormDivider />
       <FormSwitchRow
         label="Auto React DevTools"
         subLabel="Automatically connect to React DevTools"
-        leading={<FormIcon source={getAssetIDByName("ic_badge_staff")}/>}
+        leading={<FormIcon source={getAssetIDByName("ic_badge_staff")} />}
         onValueChange={setAutoRDC}
         value={autoRDC}
       />
-    </ReactNative.View>
+    </ReactNative.ScrollView>
   );
 };

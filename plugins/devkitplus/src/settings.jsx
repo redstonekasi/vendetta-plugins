@@ -17,6 +17,7 @@ export default () => {
         subLabel="Assign modules, utils, patcher to window"
         leading={<FormIcon source={getAssetIDByName("ic_message_copy")} />}
         onValueChange={(v) => {
+          storage.assignGlobals = v
           setAssignGlobals(v)
           globals(v);
         }}
@@ -27,17 +28,23 @@ export default () => {
         label="Auto debugger"
         subLabel="Automatically connect to debugger on launch"
         leading={<FormIcon source={getAssetIDByName("copy")} />}
-        onValueChange={setAutoDebugger}
+        onValueChange={(v) => {
+          storage.autoDebugger = v
+          setAutoDebugger(v)
+        }}
         value={autoDebugger}
       />
       <FormDivider />
-      <FormSwitchRow
+      {window.__vendetta_rdc && <FormSwitchRow
         label="Auto React DevTools"
         subLabel="Automatically connect to React DevTools"
         leading={<FormIcon source={getAssetIDByName("ic_badge_staff")} />}
-        onValueChange={setAutoRDC}
+        onValueChange={(v) => {
+          storage.autoRDC = v
+          setAutoRDC(v)
+        }}
         value={autoRDC}
-      />
+      />}
     </ReactNative.ScrollView>
   );
 };

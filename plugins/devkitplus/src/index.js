@@ -1,13 +1,12 @@
 import globals from "./globals";
 import socket from "./socket";
 
-const { Platform } = vendetta.metro.common.ReactNative;
 const { storage } = vendetta.plugin;
 
 // Some default settings
 storage.assignGlobals ??= true;
 storage.autoDebugger ??= true;
-storage.autoRDC ??= Platform.OS === "android";
+storage.autoRDC ??= true;
 
 globals(storage.assignGlobals);
 socket();

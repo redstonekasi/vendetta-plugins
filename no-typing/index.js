@@ -1,1 +1,1 @@
-(function(t){"use strict";const{instead:a}=vendetta.patcher,o=vendetta.metro.findByProps("startTyping"),e=["startTyping","stopTyping"].map(n=>a(n,o,()=>{})),r=()=>e.forEach(n=>n());return t.onUnload=r,t})({});
+(function(n,a,o){"use strict";const r=o.findByProps("startTyping"),e=["startTyping","stopTyping"].map(t=>a.instead(t,r,()=>{})),s=()=>e.forEach(t=>t());return n.onUnload=s,n})({},vendetta.patcher,vendetta.metro);

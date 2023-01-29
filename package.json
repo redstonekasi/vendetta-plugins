@@ -8,6 +8,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "esbuild": "^0.16.15",
     "rollup": "^3.9.1",
-    "rollup-plugin-esbuild": "^5.0.0"
+    "rollup-plugin-esbuild": "^5.0.0",
+    "vendetta-types": "^1.1.0"
   }
 }

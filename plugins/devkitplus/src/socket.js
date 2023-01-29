@@ -1,4 +1,4 @@
-const { storage } = vendetta.plugin;
+import { storage } from "@vendetta/plugin";
 
 export default () => {
   // this is only run once since you'd permanently have the annoying toasts if it didn't

@@ -1,7 +1,6 @@
-const { findByProps, findByDisplayName } = vendetta.metro;
-const { React } = vendetta.metro.common;
-const { after } = vendetta.patcher;
-const { getSize } = vendetta.metro.common.ReactNative.Image;
+import { findByProps, findByDisplayName } from "@vendetta/metro";
+import { after } from "@vendetta/patcher";
+import { Image } from "@vendetta/metro/common/ReactNative";
 
 const { Pressable } = findByProps("Button", "Text", "View");
 const ProfileBanner = findByDisplayName("ProfileBanner", false);
@@ -11,7 +10,7 @@ const { openMediaModal } = findByDisplayName("MediaModal", false);
 const { hideActionSheet } = findByProps("hideActionSheet");
 
 function openModal(uri, event) {
-  getSize(uri, (width, height) => {
+  Image.getSize(uri, (width, height) => {
     hideActionSheet(); // hide user sheet
     openMediaModal({
       initialSources: [

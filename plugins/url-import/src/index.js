@@ -1,8 +1,9 @@
-const ActionSheet = vendetta.metro.findByProps("hideActionSheet");
-const { before } = vendetta.patcher;
-const { showToast } = vendetta.ui.toasts;
-const { getAssetIDByName } = vendetta.ui.assets;
+import { findByProps } from "@vendetta/metro";
+import { before } from "@vendetta/patcher";
+import { showToast } from "@vendetta/ui/toasts";
+import { getAssetIDByName } from "@vendetta/ui/assets";
 
+const ActionSheet = findByProps("hideActionSheet");
 const unpatch = before("openLazy", ActionSheet, (args) => {
   if (args[1] !== "LongPressUrl") return;
   const [,, { header: { title: url }, options }] = args;

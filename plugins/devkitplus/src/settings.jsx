@@ -30,13 +30,13 @@ export default () => {
         value={storage.autoDebugger}
       />
       <FormDivider />
-      <FormSwitchRow
+      {window.__vendetta_rdc && <FormSwitchRow
         label="Auto React DevTools"
         subLabel="Automatically connect to React DevTools"
         leading={<FormIcon source={getAssetIDByName("ic_badge_staff")} />}
         onValueChange={(v) => (storage.autoRDC = v)}
         value={storage.autoRDC}
-      />
+      />}
     </ReactNative.ScrollView>
   );
 };

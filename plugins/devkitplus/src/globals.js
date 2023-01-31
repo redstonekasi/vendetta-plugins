@@ -1,10 +1,13 @@
+import { patcher, metro, utils, debug } from "@vendetta";
+import { common } from "@vendetta/metro";
+
 const patch = () => {
   const apply = {
-    ...vendetta.patcher,
-    ...vendetta.metro,
-    ...vendetta.metro.common,
-    ...vendetta.utils,
-    ...vendetta.debug,
+    ...patcher,
+    ...metro,
+    ...common,
+    ...utils,
+    ...debug,
   };
 
   delete apply["React"];

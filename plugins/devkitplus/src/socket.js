@@ -1,16 +1,17 @@
+import { settings } from "@vendetta";
+import { connectToDebugger } from "@vendetta/debug";
+import { ReactNative } from "@vendetta/metro/common";
 import { storage } from "@vendetta/plugin";
 
 export default () => {
   // this is only run once since you'd permanently have the annoying toasts if it didn't
   if (storage.autoDebugger)
-    vendetta.debug.connectToDebugger(vendetta.settings.debuggerUrl);
+    connectToDebugger(settings.debuggerUrl)
 
   if (storage.autoRDC && window.__vendetta_rdc) {
-    const { StyleSheet } = vendetta.metro.common.ReactNative;
-
     window.__vendetta_rdc.connectToDevTools({
-      host: vendetta.settings.debuggerUrl.split(":")[0],
-      resolveRNStyle: StyleSheet.flatten,
+      host: settings.debuggerUrl.split(":")[0],
+      resolveRNStyle: ReactNative.StyleSheet.flatten,
     });
   }
 }

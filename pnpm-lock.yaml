@@ -9,14 +9,14 @@ importers:
       esbuild: ^0.16.15
       rollup: ^3.9.1
       rollup-plugin-esbuild: ^5.0.0
-      vendetta-types: ^1.1.0
+      vendetta-types: ^2.1.0
     devDependencies:
       '@rollup/plugin-commonjs': 24.0.1_rollup@3.10.1
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.10.1
       esbuild: 0.16.17
       rollup: 3.10.1
       rollup-plugin-esbuild: 5.0.0_hw2j6smmsnfcrxj5uwrlxbef3m
-      vendetta-types: 1.1.0
+      vendetta-types: 2.1.0
 
 packages:
 
@@ -535,8 +535,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /vendetta-types/1.1.0:
-    resolution: {integrity: sha512-le5fzcl3JlGK566gSd5bW+Fwva3WsuEamrLefapenPh0UbBpDEHZydx1RLGk0mrtmOpyuCWo1eo+SSHvoZCyuw==}
+  /vendetta-types/2.1.0:
+    resolution: {integrity: sha512-9NrEBc0wklNEG3aXi7dtolZX+K7l4ymv0RXPZkDfMlNm4ObI1Olu/PiOVT2D5a74c1GpYHeiuf3fGr8wKmB9ug==}
     dependencies:
       '@types/react': 18.0.26
       '@types/react-native': 0.68.1

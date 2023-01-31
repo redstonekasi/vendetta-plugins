@@ -1,6 +1,6 @@
 import { findByProps, findByDisplayName } from "@vendetta/metro";
 import { after } from "@vendetta/patcher";
-import { Image } from "@vendetta/metro/common/ReactNative";
+import { ReactNative } from "@vendetta/metro/common";
 
 const { Pressable } = findByProps("Button", "Text", "View");
 const ProfileBanner = findByDisplayName("ProfileBanner", false);
@@ -10,7 +10,7 @@ const { openMediaModal } = findByDisplayName("MediaModal", false);
 const { hideActionSheet } = findByProps("hideActionSheet");
 
 function openModal(uri, event) {
-  Image.getSize(uri, (width, height) => {
+  ReactNative.Image.getSize(uri, (width, height) => {
     hideActionSheet(); // hide user sheet
     openMediaModal({
       initialSources: [

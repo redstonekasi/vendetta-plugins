@@ -11,7 +11,7 @@ const unpatch = before("openLazy", ActionSheet, (args) => {
   options.push({
     label: "Install plugin",
     onPress: () =>
-      vendetta.plugins.fetchPlugin(url).then(() => {
+      vendetta.plugins.installPlugin(url).then(() => {
         const id = url;
         if (!id.endsWith("/")) id += "/";
         const plugin = vendetta.plugins.plugins[id];

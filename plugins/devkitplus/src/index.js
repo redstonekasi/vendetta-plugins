@@ -1,5 +1,6 @@
 import globals from "./globals";
 import socket from "./socket";
+import window from "./window";
 
 import { storage } from "@vendetta/plugin";
 
@@ -13,6 +14,7 @@ socket();
 
 export const onUnload = () => {
   globals(false);
+  window();
 };
 
 export { default as settings } from "./settings";

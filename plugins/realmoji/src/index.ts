@@ -1,8 +1,8 @@
 import { ReactNative } from "@vendetta/metro/common";
 import { before } from "@vendetta/patcher";
-import { ContentNode, PartialLinkNode, PartialMessage } from "./def";
+import { PartialLinkNode, PartialMessage } from "./def";
 
-const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).webp\?size=\d+/;
+const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).(webp|gif|png)\?size=\d+/;
 
 const trimSpaces = (s: string) => s.replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
 
@@ -26,10 +26,10 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         .splice(firstEmojiNode)
         .filter((n) => n.type !== "text" || n.content !== "\n") as PartialLinkNode[];
 
-      const emojis = emojiNodes
+      const emojis: [string, string, boolean][] = emojiNodes
         .map((n) => regex.exec(n.target))
         .filter(Boolean)
-        .map(([, id]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`]);
+        .map(([, id, gif]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`, gif === "gif"]);
 
       const embedUrls = emojiNodes.map((n) => n.target);
 
@@ -46,7 +46,7 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         if (idx === -1) idx = el.content.lastIndexOf("\n");;
         if (idx === -1) continue;
 
-        const [id, url] = emoji;
+        const [id, url, animated] = emoji;
 
         const a = el.content.slice(0, idx);
         const b = el.content.slice(idx);
@@ -57,7 +57,7 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
           id,
           alt: "<realmoji>",
           src: url,
-          frozenSrc: url,
+          frozenSrc: animated ? url.replace("webp", "gif") : url,
           // jumboable: true,
         }, {
           type: "text",

@@ -1,6 +1,6 @@
 import { ReactNative } from "@vendetta/metro/common";
 import { before } from "@vendetta/patcher";
-import { PartialLinkNode, PartialMessage } from "./def";
+import { ContentNode, PartialLinkNode, PartialMessage } from "./def";
 
 const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).webp\?size=\d+/;
 
@@ -30,8 +30,12 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         .filter(Boolean)
         .map(([, id]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`]);
 
-      const normalUrlNodes = emojiNodes
-        .filter((n) => !regex.test(n.target));
+      const normalUrlNodes = emojiNodes // TODO: add newlines
+        .filter((n) => !regex.test(n.target))
+        .flatMap<ContentNode>((n) => [{
+          type: "text",
+          content: "\n",
+        }, n]);
 
       content.push(...normalUrlNodes);
 

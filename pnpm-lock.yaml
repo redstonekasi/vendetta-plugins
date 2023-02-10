@@ -9,14 +9,14 @@ importers:
       esbuild: ^0.16.15
       rollup: ^3.9.1
       rollup-plugin-esbuild: ^5.0.0
-      vendetta-types: ^2.3.3
+      vendetta-types: ^2.3.4
     devDependencies:
       '@rollup/plugin-commonjs': 24.0.1_rollup@3.10.1
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.10.1
       esbuild: 0.16.17
       rollup: 3.10.1
       rollup-plugin-esbuild: 5.0.0_hw2j6smmsnfcrxj5uwrlxbef3m
-      vendetta-types: 2.3.3
+      vendetta-types: 2.3.4
 
 packages:
 
@@ -542,8 +542,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /vendetta-types/2.3.3:
-    resolution: {integrity: sha512-+Q8WINTFwqW7I4gO+kvt1DcAgK9UiRogBUFb9I1UKKyICUtnK4Vl1xRltFL67NkHrKtcYpKAZ8O1+pnJWyY6yw==}
+  /vendetta-types/2.3.4:
+    resolution: {integrity: sha512-0omqXmVdSK/jdcHSs0LznHBQVcD6jL/aZSCxuUsStnya/WJBLVRmxohFnfNNgjnZGeR2HGMlXDoPd8FjELk4AQ==}
     dependencies:
       '@react-native-clipboard/clipboard': 1.10.0
       '@types/react': 18.0.26

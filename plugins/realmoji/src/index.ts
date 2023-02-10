@@ -31,7 +31,7 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         .map(([, id]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`]);
 
       const normalUrlNodes = emojiNodes
-        .filter((n) => regex.test(n.target));
+        .filter((n) => !regex.test(n.target));
 
       content.push(...normalUrlNodes);
 

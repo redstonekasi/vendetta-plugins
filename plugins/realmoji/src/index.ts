@@ -2,7 +2,7 @@ import { ReactNative } from "@vendetta/metro/common";
 import { before } from "@vendetta/patcher";
 import { PartialLinkNode, PartialMessage } from "./def";
 
-const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).(webp|gif|png)\?size=\d+/;
+const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).(webp|gif|png)/;
 
 const trimSpaces = (s: string) => s.replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
 
@@ -21,6 +21,8 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
       if (firstEmojiNode === -1)
         continue;
 
+      const originalContent = [...content];
+
       // Parse block of emoji urls
       const emojiNodes = content
         .splice(firstEmojiNode)
@@ -29,9 +31,14 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
       const emojis: [string, string, boolean][] = emojiNodes
         .map((n) => regex.exec(n.target))
         .filter(Boolean)
-        .map(([, id, gif]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`, gif === "gif"]);
+        .map(([, id, type]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`, type === "gif"]);
 
       const embedUrls = emojiNodes.map((n) => n.target);
+
+      if (!content.length) {
+        row.message.content = originalContent;
+        continue;
+      }
 
       // Freemoji leaves "holes" in it's messages, "  ". We fill these in using
       // the available emojis.
@@ -66,7 +73,7 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
       }
 
       const lastTextNode = content[content.length - 1];
-      if (lastTextNode.type === "text")
+      if (lastTextNode?.type === "text")
         lastTextNode.content === "\n"
           ? content.length = content.length - 1
           : lastTextNode.content = lastTextNode.content.trimEnd();

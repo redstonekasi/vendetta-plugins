@@ -25,6 +25,16 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         .filter((n) => n.type !== "text" || n.content !== "\n") as PartialLinkNode[];
       if (emojiNodes.some((n) => n.type !== "link")) continue;
 
+      const emojis = emojiNodes
+        .map((n) => regex.exec(n.target))
+        .filter(Boolean)
+        .map(([, id]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`]);
+
+      const normalUrlNodes = emojiNodes
+        .filter((n) => regex.test(n.target));
+
+      content.push(...normalUrlNodes);
+
       const embedUrls = emojiNodes.map((n) => n.target);
 
       // Freemoji leaves "holes" in it's messages, "  ". We fill these in using
@@ -33,15 +43,14 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         const el = content[i];
         if (el.type !== "text") continue;
 
-        const emoji = emojiNodes.shift();
+        const emoji = emojis.shift();
         if (!emoji) break;
 
         let idx = el.content.indexOf("  ");
         if (idx === -1) idx = el.content.lastIndexOf("\n");;
         if (idx === -1) continue;
 
-        const [match, id] = regex.exec(emoji.target);
-        if (!match) continue;
+        const [id, url] = emoji;
 
         const a = el.content.slice(0, idx);
         const b = el.content.slice(idx);
@@ -51,8 +60,8 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
           type: "customEmoji",
           id,
           alt: "<realmoji>",
-          src: `https://cdn.discordapp.com/emojis/${id}.webp?size=160`,
-          frozenSrc: `https://cdn.discordapp.com/emojis/${id}.webp?size=160`,
+          src: url,
+          frozenSrc: url,
           // jumboable: true,
         }, {
           type: "text",

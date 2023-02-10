@@ -4,40 +4,32 @@ import { ContentNode, PartialLinkNode, PartialMessage } from "./def";
 
 const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).webp\?size=\d+/;
 
+const trimSpaces = (s: string) => s.replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
+
 /* i10 logTag, z10 unused */
 const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, ([i10, rowsJSON, z10]: [number, string, boolean]) => {
   const parsed = JSON.parse(rowsJSON) as Array<any>;
 
   for (const row of parsed) {
-    console.log(row);
     if (row.message && (row.changeType !== 3)) {
       const { content, embeds } = row.message as PartialMessage;
-      if (!content) continue;
+      if (!Array.isArray(content)) continue;
 
-      const lastTextNode = content.findLastIndex((n) => n.type === "text" && n.content !== "\n");
+      const firstEmojiNode = content.findIndex((n) => n.type === "link" && regex.test(n.target));
 
       // There are no shelter/vendetta appended freemojis in this message
-      if (lastTextNode === - 1 || lastTextNode === content.length - 1)
+      if (firstEmojiNode === -1)
         continue;
 
+      // Parse block of emoji urls
       const emojiNodes = content
-        .splice(lastTextNode + 1)
+        .splice(firstEmojiNode)
         .filter((n) => n.type !== "text" || n.content !== "\n") as PartialLinkNode[];
-      if (emojiNodes.some((n) => n.type !== "link")) continue;
 
       const emojis = emojiNodes
         .map((n) => regex.exec(n.target))
         .filter(Boolean)
         .map(([, id]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`]);
-
-      const normalUrlNodes = emojiNodes // TODO: add newlines
-        .filter((n) => !regex.test(n.target))
-        .flatMap<ContentNode>((n) => [{
-          type: "text",
-          content: "\n",
-        }, n]);
-
-      content.push(...normalUrlNodes);
 
       const embedUrls = emojiNodes.map((n) => n.target);
 
@@ -59,7 +51,7 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         const a = el.content.slice(0, idx);
         const b = el.content.slice(idx);
 
-        el.content = (i !== 0 ? " " : "") + a.trim() + " ";
+        el.content = (i !== 0 ? " " : "") + trimSpaces(a) + " ";
         content.splice(i + 1, 0, {
           type: "customEmoji",
           id,
@@ -69,9 +61,15 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
           // jumboable: true,
         }, {
           type: "text",
-          content: " " + b.trim(),
+          content: " " + trimSpaces(b),
         });
       }
+
+      const lastTextNode = content[content.length - 1];
+      if (lastTextNode.type === "text")
+        lastTextNode.content === "\n"
+          ? content.length = content.length - 1
+          : lastTextNode.content = lastTextNode.content.trimEnd();
 
       for (let i = 0; i < embeds.length; i++) {
         const embed = embeds[i];

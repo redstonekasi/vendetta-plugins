@@ -71,6 +71,13 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         });
       }
 
+      // I could just append remaining emojis to the end of the message but
+      // something has likely gone wrong so I'll restore the original content.
+      if (emojis.length) {
+        row.message.content = originalContent;
+        continue;
+      }
+
       const lastTextNode = content[content.length - 1];
       if (lastTextNode?.type === "text")
         lastTextNode.content === "\n"

@@ -46,12 +46,12 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
         const el = content[i];
         if (el.type !== "text") continue;
 
-        const emoji = emojis.shift();
-        if (!emoji) break;
-
         let idx = el.content.indexOf("  ");
         if (idx === -1) idx = el.content.lastIndexOf("\n");;
         if (idx === -1) continue;
+
+        const emoji = emojis.shift();
+        if (!emoji) break;
 
         const [id, url, animated] = emoji;
 
@@ -65,7 +65,6 @@ const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, (
           alt: "<realmoji>",
           src: url,
           frozenSrc: animated ? url.replace("webp", "gif") : url,
-          // jumboable: true,
         }, {
           type: "text",
           content: " " + trimSpaces(b),

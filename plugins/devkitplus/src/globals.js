@@ -1,5 +1,6 @@
 import { patcher, metro, utils, debug } from "@vendetta";
 import { common } from "@vendetta/metro";
+import { findByKeyword, findByKeywordAll } from "./window";
 
 const patch = () => {
   const apply = {
@@ -8,6 +9,8 @@ const patch = () => {
     ...common,
     ...utils,
     ...debug,
+    findByKeyword,
+    findByKeywordAll,
   };
 
   delete apply["React"];

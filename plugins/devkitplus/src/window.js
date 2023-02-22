@@ -1,6 +1,7 @@
 import { after } from "@vendetta/patcher";
+import { find, findAll } from "@vendetta/metro";
 
-const bullets = [];
+const recons = [];
 
 const snipe = (funcName, funcParent, oneTime = false) => {
   const unrecon = after(
@@ -9,7 +10,7 @@ const snipe = (funcName, funcParent, oneTime = false) => {
     (args, ret) => console.log(`RECON: ${funcName}`, args, ret),
     oneTime
   );
-  bullets.push(unrecon);
+  recons.push(unrecon);
   return unrecon;
 };
 
@@ -18,17 +19,24 @@ const shotgun = (funcParent, oneTime = false) => {
     .filter((field) => typeof funcParent[field] === "function")
     .map((funcName) => snipe(funcName, funcParent, oneTime));
   
-  bullets.push(...unrecons);
+  recons.push(...unrecons);
   return () => unrecons.forEach((f) => f());
 };
+
+const keywordFilter = (ks) => (m) => ks.every((s) => Object.keys(m).some((k) => k.toLowerCase().includes(s.toLowerCase())));
+
+export const findByKeyword = (...k) => find(keywordFilter(k));
+export const findByKeywordAll = (...k) => findAll(keywordFilter(k));
 
 window.dk = {
   snipe,
   shotgun,
   wipe: () => {
-    bullets.forEach((f) => f());
-    bullets = [];
+    recons.forEach((f) => f());
+    recons = [];
   },
+  findByKeyword,
+  findByKeywordAll
 };
 
 export default () => delete window.dk;

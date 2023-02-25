@@ -28,8 +28,11 @@ export const onLoad = async function() {
     if (!ven.ok) return;
 
     const vendettaJs = await ven.text();
-    const wrappedPayload = `(()=>{${payload.replace("__RAND_PROVIDER__", storage.random ? "math" : "xoshiro")}})();`;
-    const newVendetta = wrappedPayload + "\n" + vendettaJs;
+    const wrappedPayload = `(()=>{${payload}})();`;
+    let newVendetta = wrappedPayload + "\n" + vendettaJs;
+
+    newVendetta = newVendetta.replace("__RAND_PROVIDER__", storage.random ? "math" : "xoshiro");
+    newVendetta = newVendetta.replace(/vendetta:{version:\w+/, `vendetta:{version:"super_awesome_confidential_vendetta_update.ts (${version})"`)
 
     // i think it's under documents in ios, not sure though. fiery or beef will tell me NOW
     const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile("/data/user/0/com.discord/cache/vendetta.js", "utf8");

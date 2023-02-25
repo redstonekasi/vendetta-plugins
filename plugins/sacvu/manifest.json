@@ -1,0 +1,14 @@
+{
+  "name": "super_awesome_confidential_vendetta_update.ts",
+  "description": "whatever may this do?",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.js",
+  "vendetta": {
+    "icon": "ic_link"
+  }
+}

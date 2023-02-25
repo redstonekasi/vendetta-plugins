@@ -1,11 +1,12 @@
 // copied from beef for now
 
-import { rollup } from "rollup";
 import { readFile, writeFile, readdir } from "fs/promises";
 import { createHash } from "crypto";
-import esbuild from "rollup-plugin-esbuild";
+import { rollup } from "rollup";
+import esbuildPlugin from "rollup-plugin-esbuild";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import * as esbuild from "esbuild";
 
 for (let plug of await readdir("./plugins")) {
   const manifest = JSON.parse(await readFile(`./plugins/${plug}/manifest.json`));
@@ -18,10 +19,24 @@ for (let plug of await readdir("./plugins")) {
       plugins: [
         nodeResolve(),
         commonjs(),
-        esbuild({
+        esbuildPlugin({
           target: "esnext",
           minify: true,
         }),
+        {
+          async load(id) {
+            const info = this.getModuleInfo(id);
+            if (info.assertions.type === "raw") {
+              let text = await readFile(id, "utf-8");
+              const minified = await esbuild.transform(text, {
+                minify: true,
+                loader: id.split(".").at(-1)
+              }).then((res) => res.code.trim());
+
+              return `export default ${JSON.stringify(minified)};`
+            }
+          }
+        }
       ],
     });
 

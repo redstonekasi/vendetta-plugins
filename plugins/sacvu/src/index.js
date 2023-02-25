@@ -45,8 +45,9 @@ export const onUnload = () => {
         enabled: false,
         url: "http://localhost:4040/vendetta.js",
     };
-    plugins.plugins[id].enabled = false;
-    ReactNative.NativeModules.BundleUpdaterManager.reload()
+
+    // Give Vendetta time to do it's thing
+    setTimeout(() => ReactNative.NativeModules.BundleUpdaterManager.reload(), 200);
 };
 
 export { default as settings } from "./settings.jsx";

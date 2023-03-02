@@ -1,23 +1,10 @@
 import { ReactNative } from "@vendetta/metro/common";
-import { findByProps } from "@vendetta/metro";
-import { id, storage } from "@vendetta/plugin";
-import { plugins, loader, version } from "@vendetta";
+import { storage } from "@vendetta/plugin";
+import { loader } from "@vendetta";
 
 import payload from "./payload.js" assert {type: "raw"};
 
 export const onLoad = async function() {
-    // if (ReactNative.Platform.OS !== "android") {
-    //     const Dialog = findByProps("show", "openLazy", "close");
-    //     Dialog.show({
-    //         title: "Explode",
-    //         body: "This is not available on iOS for now.",
-    //         confirmText: "Okay",
-    //     });
-    //     // Vendetta will explode if I don't setTimeout since removing the plugin while it's loading causes issues.
-    //     setTimeout(() => plugins.removePlugin(id), 200);
-    //     return;
-    // }
-    
     __vendetta_loader.features.loaderConfig = false;
     loader.config.customLoadUrl = {
         enabled: true,

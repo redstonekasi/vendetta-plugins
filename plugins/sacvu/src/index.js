@@ -6,18 +6,18 @@ import { plugins, loader, version } from "@vendetta";
 import payload from "./payload.js" assert {type: "raw"};
 
 export const onLoad = async function() {
-    if (ReactNative.Platform.OS !== "android") {
-        const Dialog = findByProps("show", "openLazy", "close");
-        Dialog.show({
-            title: "Explode",
-            body: "This is not available on iOS for now.",
-            confirmText: "Okay",
-        });
-        // Vendetta will explode if I don't setTimeout since removing the plugin while it's loading causes issues.
-        setTimeout(() => plugins.removePlugin(id), 200);
-        return;
-    }
-
+    // if (ReactNative.Platform.OS !== "android") {
+    //     const Dialog = findByProps("show", "openLazy", "close");
+    //     Dialog.show({
+    //         title: "Explode",
+    //         body: "This is not available on iOS for now.",
+    //         confirmText: "Okay",
+    //     });
+    //     // Vendetta will explode if I don't setTimeout since removing the plugin while it's loading causes issues.
+    //     setTimeout(() => plugins.removePlugin(id), 200);
+    //     return;
+    // }
+    
     __vendetta_loader.features.loaderConfig = false;
     loader.config.customLoadUrl = {
         enabled: true,
@@ -30,9 +30,13 @@ export const onLoad = async function() {
     const vendettaJs = await ven.text();
     const wrappedPayload = `(()=>{${payload.replace("__RAND_PROVIDER__", storage.random ? "math" : "xoshiro")}})();`;
     const newVendetta = wrappedPayload + "\n" + vendettaJs;
+    
+    const path = ReactNative.Platform.select({
+        default: "/data/user/0/com.discord/cache/vendetta.js",
+        ios: `${nativeModuleProxy.DCDFileManager.getConstants().DocumentsDirPath}/vendetta.js`,
+    });
 
-    // i think it's under documents in ios, not sure though. fiery or beef will tell me NOW
-    const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile("/data/user/0/com.discord/cache/vendetta.js", "utf8");
+    const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile(path, "utf8");
     await nativeModuleProxy.DCDFileManager.writeFile("cache", "vendetta.js", newVendetta, "utf8");
     if (oldVendetta !== newVendetta)
         ReactNative.NativeModules.BundleUpdaterManager.reload();

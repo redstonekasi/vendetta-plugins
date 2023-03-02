@@ -36,8 +36,18 @@ export const onLoad = async function() {
         ios: `${nativeModuleProxy.DCDFileManager.getConstants().DocumentsDirPath}/vendetta.js`,
     });
 
+    const target = ReactNative.Platform.select({
+        default: "cache",
+        ios: "documents",
+    });
+
+    const vjsPath = ReactNative.Platform.select({
+        default: "vendetta.js",
+        ios: "Documents/vendetta.js",
+    });
+
     const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile(path, "utf8");
-    await nativeModuleProxy.DCDFileManager.writeFile("cache", "vendetta.js", newVendetta, "utf8");
+    await nativeModuleProxy.DCDFileManager.writeFile(target, vjsPath, newVendetta, "utf8");
     if (oldVendetta !== newVendetta)
         ReactNative.NativeModules.BundleUpdaterManager.reload();
 }

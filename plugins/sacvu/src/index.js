@@ -30,24 +30,18 @@ export const onLoad = async function() {
     const vendettaJs = await ven.text();
     const wrappedPayload = `(()=>{${payload.replace("__RAND_PROVIDER__", storage.random ? "math" : "xoshiro")}})();`;
     const newVendetta = wrappedPayload + "\n" + vendettaJs;
-    
-    const path = ReactNative.Platform.select({
-        default: "/data/user/0/com.discord/cache/vendetta.js",
-        ios: `${nativeModuleProxy.DCDFileManager.getConstants().DocumentsDirPath}/vendetta.js`,
+
+    const [readPath, writeTarget, writeVjs] = ReactNative.Platform.select({
+        default: ["/data/user/0/com.discord/cache/vendetta.js", "cache", "vendetta.js"],
+        ios: [
+            `${nativeModuleProxy.DCDFileManager.getConstants().DocumentsDirPath}/vendetta.js`,
+            "documents",
+            "Documents/vendetta.js",
+        ],
     });
 
-    const target = ReactNative.Platform.select({
-        default: "cache",
-        ios: "documents",
-    });
-
-    const vjsPath = ReactNative.Platform.select({
-        default: "vendetta.js",
-        ios: "Documents/vendetta.js",
-    });
-
-    const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile(path, "utf8");
-    await nativeModuleProxy.DCDFileManager.writeFile(target, vjsPath, newVendetta, "utf8");
+    const oldVendetta = await nativeModuleProxy.DCDFileManager.readFile(readPath, "utf8");
+    await nativeModuleProxy.DCDFileManager.writeFile(writeTarget, writeVjs, newVendetta, "utf8");
     if (oldVendetta !== newVendetta)
         ReactNative.NativeModules.BundleUpdaterManager.reload();
 }

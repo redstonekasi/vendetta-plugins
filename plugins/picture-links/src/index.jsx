@@ -1,12 +1,12 @@
-import { findByProps, findByDisplayName } from "@vendetta/metro";
+import { findByProps, findByName } from "@vendetta/metro";
 import { after } from "@vendetta/patcher";
 import { ReactNative } from "@vendetta/metro/common";
 
 const { Pressable } = findByProps("Button", "Text", "View");
-const ProfileBanner = findByDisplayName("ProfileBanner", false);
-const HeaderAvatar = findByDisplayName("HeaderAvatar", false);
-const GuildIcon = findByDisplayName("GuildIcon");
-const { openMediaModal } = findByDisplayName("MediaModal", false);
+const ProfileBanner = findByName("ProfileBanner", false);
+const HeaderAvatar = findByName("HeaderAvatar", false);
+const GuildIcon = findByName("GuildIcon");
+const { openMediaModal } = findByName("MediaModal", false);
 const { hideActionSheet } = findByProps("hideActionSheet");
 
 function openModal(uri, event) {

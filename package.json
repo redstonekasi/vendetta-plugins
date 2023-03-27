@@ -9,6 +9,6 @@
     "esbuild": "^0.16.15",
     "rollup": "^3.9.1",
     "rollup-plugin-esbuild": "^5.0.0",
-    "vendetta-types": "latest"
+    "vendetta-types": "^2.4.0"
   }
 }

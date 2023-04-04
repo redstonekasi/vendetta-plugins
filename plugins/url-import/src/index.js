@@ -1,28 +1,9 @@
-import { findByProps } from "@vendetta/metro";
-import { before } from "@vendetta/patcher";
-import { showToast } from "@vendetta/ui/toasts";
+import { id } from "@vendetta/plugin";
+import { removePlugin } from "@vendetta/plugins";
 import { getAssetIDByName } from "@vendetta/ui/assets";
+import { showToast } from "@vendetta/ui/toasts";
 
-const ActionSheet = findByProps("hideActionSheet");
-const unpatch = before("openLazy", ActionSheet, (args) => {
-  if (args[1] !== "LongPressUrl") return;
-  const [,, { header: { title: url }, options }] = args;
+removePlugin(id);
+showToast("URL import has been integrated into Vendetta and thus removed.", getAssetIDByName("ic_information_filled_24px"));
 
-  options.push({
-    label: "Install plugin",
-    onPress: () =>
-      vendetta.plugins.installPlugin(url).then(() => {
-        const id = url;
-        if (!id.endsWith("/")) id += "/";
-        const plugin = vendetta.plugins.plugins[id];
-        if (plugin)
-          showToast(`Successfully installed ${plugin.manifest.name}`, getAssetIDByName("Check"));
-      }).catch((e) => {
-        showToast(e.message, getAssetIDByName("Small"));
-      }),
-  });
-
-  return args;
-});
-
-export const onUnload = () => unpatch();
+export const onUnload = () => {};

@@ -1,0 +1,1 @@
+(function(t,e,n,a,i){"use strict";n.removePlugin(e.id),i.showToast("URL import has been integrated into Vendetta and thus removed.",a.getAssetIDByName("ic_information_filled_24px"));const o=()=>{};return t.onUnload=o,t})({},vendetta.plugin,vendetta.plugins,vendetta.ui.assets,vendetta.ui.toasts);

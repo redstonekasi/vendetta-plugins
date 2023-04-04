@@ -5,7 +5,7 @@ import { storage } from "@vendetta/plugin";
 
 export default () => {
   // this is only run once since you'd permanently have the annoying toasts if it didn't
-  if (storage.autoDebugger)
+  if (storage.autoDebugger && settings.debuggerUrl)
     connectToDebugger(settings.debuggerUrl)
 
   if (storage.autoRDC && window.__vendetta_rdc) {

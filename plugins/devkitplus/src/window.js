@@ -33,7 +33,7 @@ window.dk = {
   shotgun,
   wipe: () => {
     recons.forEach((f) => f());
-    recons = [];
+    recons.length = 0;
   },
   findByKeyword,
   findByKeywordAll

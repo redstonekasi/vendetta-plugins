@@ -1,0 +1,14 @@
+{
+  "name": "Image search",
+  "description": "Quickly open an image in either SauceNAO or trace.moe",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.tsx",
+  "vendetta": {
+    "icon": "speaker"
+  }
+}

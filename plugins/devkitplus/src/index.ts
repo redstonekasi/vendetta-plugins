@@ -1,6 +1,6 @@
-import globals from "./globals";
-import socket from "./socket";
-import window from "./window";
+import globals from "./patches/globals";
+import socket from "./patches/socket";
+import window from "./patches/window";
 
 import { storage } from "@vendetta/plugin";
 

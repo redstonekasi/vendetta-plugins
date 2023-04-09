@@ -1,10 +1,13 @@
 import { ReactNative } from "@vendetta/metro/common";
-import { FormDivider, FormIcon, FormSwitchRow } from "@vendetta/ui/components/Forms";
+import { Forms } from "@vendetta/ui/components";
 import { getAssetIDByName } from "@vendetta/ui/assets";
 import { storage } from "@vendetta/plugin";
 import { useProxy } from "@vendetta/storage";
 
-import globals from "./globals";
+import globals from "./patches/globals";
+import { rdcProp } from "./patches/socket";
+
+const { FormDivider, FormIcon, FormSwitchRow } = Forms;
 
 export default () => {
   useProxy(storage);
@@ -30,7 +33,7 @@ export default () => {
         value={storage.autoDebugger}
       />
       <FormDivider />
-      {window.__vendetta_rdc && <FormSwitchRow
+      {window[rdcProp] && <FormSwitchRow
         label="Auto React DevTools"
         subLabel="Automatically connect to React DevTools"
         leading={<FormIcon source={getAssetIDByName("ic_badge_staff")} />}

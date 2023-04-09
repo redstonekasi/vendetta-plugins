@@ -1,98 +1,63 @@
-import { ReactNative } from "@vendetta/metro/common";
-import { before } from "@vendetta/patcher";
-import { PartialLinkNode, PartialMessage } from "./def";
+import { findByName } from "@vendetta/metro";
+import { after, before } from "@vendetta/patcher";
+import { Embed, Message } from "vendetta-extras";
 
-const regex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+).(webp|gif|png)/;
+const patches = [];
+const RowManager = findByName("RowManager");
+const emojiRegex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+)\.\w+/;
 
-const trimSpaces = (s: string) => s.replace(/^[ \t]+/, "").replace(/[ \t]+$/, "");
+patches.push(before("generate", RowManager.prototype, ([data]) => {
+  if (data.rowType !== 1) return;
 
-/* i10 logTag, z10 unused */
-const unpatch = before("updateRows", ReactNative.NativeModules.DCDChatManager, ([i10, rowsJSON, z10]: [number, string, boolean]) => {
-  const parsed = JSON.parse(rowsJSON) as Array<any>;
+  let content = data.message.content as string;
+  if (!content?.length) return;
+  const matchIndex = content.match(emojiRegex)?.index;
+  if (matchIndex === undefined) return;
+  const emojis = content.slice(matchIndex).trim().split("\n");
+  if (!emojis.every((s) => s.match(emojiRegex))) return;
+  content = content.slice(0, matchIndex);
 
-  for (const row of parsed) {
-    if (row.message && (row.changeType !== 3)) {
-      const { content, embeds } = row.message as PartialMessage;
-      if (!Array.isArray(content)) continue;
+  while (content.indexOf("  ") !== -1)
+    content = content.replace("  ", ` ${emojis.shift()} `);
 
-      const firstEmojiNode = content.findIndex((n) => n.type === "link" && regex.test(n.target));
+  content = content.trim();
+  if (emojis.length) content += ` ${emojis.join(" ")}`;
 
-      // There are no shelter/vendetta appended freemojis in this message
-      if (firstEmojiNode === -1)
-        continue;
-
-      const originalContent = [...content];
-
-      // Parse block of emoji urls
-      const emojiNodes = content
-        .splice(firstEmojiNode)
-        .filter((n) => n.type !== "text" || n.content !== "\n") as PartialLinkNode[];
-
-      const emojis: [string, string, boolean][] = emojiNodes
-        .map((n) => regex.exec(n.target))
-        .filter(Boolean)
-        .map(([, id, type]) => [id, `https://cdn.discordapp.com/emojis/${id}.webp?size=160`, type === "gif"]);
-
-      const embedUrls = emojiNodes.map((n) => n.target);
-
-      if (!content.length) {
-        row.message.content = originalContent;
-        continue;
-      }
-
-      // Freemoji leaves "holes" in it's messages, "  ". We fill these in using
-      // the available emojis.
-      for (let i = 0; i < content.length; i++) {
-        const el = content[i];
-        if (el.type !== "text") continue;
-
-        let idx = el.content.indexOf("  ");
-        if (idx === -1) idx = el.content.lastIndexOf("\n");;
-        if (idx === -1) continue;
-
-        const emoji = emojis.shift();
-        if (!emoji) break;
-
-        const [id, url, animated] = emoji;
-
-        const a = el.content.slice(0, idx);
-        const b = el.content.slice(idx);
-
-        el.content = (i !== 0 ? " " : "") + trimSpaces(a) + " ";
-        content.splice(i + 1, 0, {
-          type: "customEmoji",
-          id,
-          alt: "<realmoji>",
-          src: url,
-          frozenSrc: animated ? url.replace("webp", "gif") : url,
-        }, {
-          type: "text",
-          content: " " + trimSpaces(b),
-        });
-      }
-
-      // I could just append remaining emojis to the end of the message but
-      // something has likely gone wrong so I'll restore the original content.
-      if (emojis.length) {
-        row.message.content = originalContent;
-        continue;
-      }
-
-      const lastTextNode = content[content.length - 1];
-      if (lastTextNode?.type === "text")
-        lastTextNode.content === "\n"
-          ? content.length = content.length - 1
-          : lastTextNode.content = lastTextNode.content.trimEnd();
-
-      for (let i = 0; i < embeds.length; i++) {
-        const embed = embeds[i];
-        if (embed.type === "image" && embedUrls.includes(embed.url))
-          embeds.splice(i--, 1);
-      }
-    }
+  const embeds = data.message.embeds as Embed[];
+  for (let i = 0; i < embeds.length; i++) {
+    const embed = embeds[i];
+    if (embed.type === "image" && embed.url.match(emojiRegex))
+      embeds.splice(i--, 1);
   }
 
-  return [i10, JSON.stringify(parsed), z10];
-});
+  data.message.content = content;
+  data.__realmoji = true;
+}));
 
-export const onUnload = () => unpatch();
+patches.push(after("generate", RowManager.prototype, ([data], row) => {
+  if (data.rowType !== 1 || data.__realmoji !== true) return;
+  const { content } = row.message as Message;
+  if (!Array.isArray(content)) return;
+
+  const jumbo = content.every((c) => (c.type === "link" && c.target.match(emojiRegex)) || (c.type === "text" && c.content === " "));
+
+  for (let i = 0; i < content.length; i++) {
+    const el = content[i];
+    if (el.type !== "link") continue;
+
+    const match = el.target.match(emojiRegex);
+    if (!match) continue;
+    const url = `${match[0]}?size=128`;
+
+    content[i] = {
+      type: "customEmoji",
+      id: match[1],
+      alt: "<realmoji>",
+      src: url.replace("gif", "webp"),
+      frozenSrc: url,
+      jumboable: jumbo,
+    };
+  }
+}));
+
+export const onUnload = () => patches.forEach((unpatch) => unpatch());

@@ -45,7 +45,7 @@ const services: Record<string, Service> = {
   },
   google: {
     name: "Google Images",
-    url: `https://www.google.com/searchbyimage?image_url=%s&safe=off`,
+    url: `https://lens.google.com/uploadbyurl?url=%s`,
   },
   yandex: {
     name: "Yandex Images",

@@ -1,6 +1,6 @@
 {
   "name": "Image search",
-  "description": "Quickly open an image in either SauceNAO or trace.moe",
+  "description": "Quickly open an image in various reverse image search services",
   "authors": [
     {
       "name": "redstonekasi",

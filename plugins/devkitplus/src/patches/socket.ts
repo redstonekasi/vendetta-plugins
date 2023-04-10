@@ -3,7 +3,7 @@ import { connectToDebugger } from "@vendetta/debug";
 import { ReactNative } from "@vendetta/metro/common";
 import { storage } from "@vendetta/plugin";
 
-export const rdcProp = window.__vendetta_loader.features.devtools?.prop;
+export const rdcProp = window.__vendetta_loader?.features.devtools?.prop;
 
 export default () => {
   // this is only run once since you'd permanently have the annoying toasts if it didn't

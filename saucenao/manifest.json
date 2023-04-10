@@ -1,1 +1,1 @@
-{"name":"Image search","description":"Quickly open an image in either SauceNAO or trace.moe","authors":[{"name":"redstonekasi","id":"265064055490871297"}],"main":"index.js","vendetta":{"icon":"speaker"},"hash":"1d9122d046332cad2e5d3a68841d9f96a145d4d2dc46575f821a074b126f163c"}
+{"name":"Image search","description":"Quickly open an image in various reverse image search services","authors":[{"name":"redstonekasi","id":"265064055490871297"}],"main":"index.js","vendetta":{"icon":"speaker"},"hash":"d3c9ec8c00d53a8b711f2c155df064f9ecbfa41a0325ddc9e8fd9379eb8926ec"}

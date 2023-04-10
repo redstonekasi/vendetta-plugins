@@ -1,8 +1,9 @@
-import { findByName } from "@vendetta/metro";
+import { findByName, findByStoreName } from "@vendetta/metro";
 import { after, before } from "@vendetta/patcher";
 import { Embed, Message } from "vendetta-extras";
 
 const patches = [];
+const { getCustomEmojiById } = findByStoreName("EmojiStore");
 const RowManager = findByName("RowManager");
 const emojiRegex = /https:\/\/cdn.discordapp.com\/emojis\/(\d+)\.\w+/;
 
@@ -49,10 +50,12 @@ patches.push(after("generate", RowManager.prototype, ([data], row) => {
     if (!match) continue;
     const url = `${match[0]}?size=128`;
 
+    const emoji = getCustomEmojiById(match[1]);
+
     content[i] = {
       type: "customEmoji",
       id: match[1],
-      alt: "<realmoji>",
+      alt: emoji?.name ?? "<realmoji>",
       src: url.replace("gif", "webp"),
       frozenSrc: url,
       jumboable: jumbo,

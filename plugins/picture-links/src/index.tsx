@@ -1,4 +1,4 @@
-import { findByProps, findByName } from "@vendetta/metro";
+import { findByProps, findByName, findByStoreName } from "@vendetta/metro";
 import { after } from "@vendetta/patcher";
 import { ReactNative } from "@vendetta/metro/common";
 
@@ -8,6 +8,8 @@ const HeaderAvatar = findByName("HeaderAvatar", false);
 const GuildIcon = findByName("GuildIcon");
 const { openMediaModal } = findByName("MediaModal", false);
 const { hideActionSheet } = findByProps("hideActionSheet");
+const { getChannelId } = findByStoreName("SelectedChannelStore");
+const { getGuildId } = findByStoreName("SelectedGuildStore");
 
 function openModal(uri, event) {
   ReactNative.Image.getSize(uri, (width, height) => {
@@ -19,6 +21,8 @@ function openModal(uri, event) {
           sourceURI: uri,
           width,
           height,
+          guildId: getGuildId(),
+          channelId: getChannelId(),
         },
       ],
       initialIndex: 0,

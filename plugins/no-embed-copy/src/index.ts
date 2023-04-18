@@ -4,5 +4,5 @@ import { after, instead } from "@vendetta/patcher";
 const Chat = findByName("Chat");
 
 export const onUnload = after("render", Chat.prototype, (_, ret) => {
-  instead("onTapCopyText", ret.props, () => {});
+  if (ret?.props?.onTapCopyText) instead("onTapCopyText", ret.props, () => {});
 });

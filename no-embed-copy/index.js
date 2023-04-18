@@ -1,0 +1,1 @@
+(function(n,e,t){"use strict";const o=e.findByName("Chat"),a=t.after("render",o.prototype,(d,r)=>{t.instead("onTapCopyText",r.props,()=>{})});return n.onUnload=a,n})({},vendetta.metro,vendetta.patcher);

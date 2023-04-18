@@ -1,0 +1,14 @@
+{
+  "name": "No Embed Copy",
+  "description": "Makes pressing on an embed no longer copy it's content.",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.ts",
+  "vendetta": {
+    "icon": "ic_message_copy"
+  }
+}

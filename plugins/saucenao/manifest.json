@@ -9,6 +9,6 @@
   ],
   "main": "src/index.tsx",
   "vendetta": {
-    "icon": "speaker"
+    "icon": "search"
   }
 }

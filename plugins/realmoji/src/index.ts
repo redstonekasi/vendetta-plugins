@@ -56,9 +56,9 @@ patches.push(after("generate", RowManager.prototype, ([data], row) => {
       type: "customEmoji",
       id: match[1],
       alt: emoji?.name ?? "<realmoji>",
-      src: url.replace("gif", "webp"),
-      frozenSrc: url,
-      jumboable: jumbo,
+      src: url,
+      frozenSrc: url.replace("gif", "webp"),
+      jumboable: jumbo ? true : undefined,
     };
   }
 }));

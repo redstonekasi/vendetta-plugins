@@ -1,0 +1,14 @@
+{
+  "name": "Message Logger",
+  "description": "Temporarily logs deletions for moderation purposes",
+  "authors": [
+    {
+      "name": "redstonekasi",
+      "id": "265064055490871297"
+    }
+  ],
+  "main": "src/index.ts",
+  "vendetta": {
+    "icon": "ic_audit_log_24px"
+  }
+}

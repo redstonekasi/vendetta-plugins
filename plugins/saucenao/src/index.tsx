@@ -1,13 +1,13 @@
 import { React, ReactNative as RN } from "@vendetta/metro/common";
 import { Forms } from "@vendetta/ui/components";
-import { findByName, findByProps } from "@vendetta/metro";
+import { findByProps } from "@vendetta/metro";
 import { after, before } from "@vendetta/patcher";
 import { getAssetIDByName } from "@vendetta/ui/assets";
 import { storage } from "@vendetta/plugin";
 import { useProxy } from "@vendetta/storage";
 
 const { FormRow } = Forms;
-const Icon = findByName("Icon");
+const Icon = findByProps("Sizes", "compare") as unknown as React.ElementType;
 
 const ActionSheet = findByProps("openLazy", "hideActionSheet");
 const { openURL } = findByProps("openURL", "openDeeplink");

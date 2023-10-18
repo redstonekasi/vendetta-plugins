@@ -44,7 +44,7 @@ const unpatchAvatar = after("default", HeaderAvatar, ([{ user, style, guildId }]
 
   const url =
     typeof image === "number"
-      ? `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`
+      ? `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(user.id) >> 22n) % 6}.png`
       : image?.replace(".webp", ".png");
 
   delete res.props.style;

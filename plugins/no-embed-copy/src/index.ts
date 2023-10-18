@@ -1,8 +1,8 @@
-import { findByName } from "@vendetta/metro";
+import { findByProps } from "@vendetta/metro";
 import { after, instead } from "@vendetta/patcher";
 
-const Chat = findByName("Chat");
+const MessagesHandlersModule = findByProps("MessagesHandlers");
 
-export const onUnload = after("render", Chat.prototype, (_, ret) => {
-  if (ret?.props?.onTapCopyText) instead("onTapCopyText", ret.props, () => {});
+export const onUnload = after("MessagesHandlers", MessagesHandlersModule, (_, ret) => {
+  if (ret?.handleCopyText) instead("handleCopyText", ret, () => {});
 });

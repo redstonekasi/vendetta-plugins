@@ -1,1 +1,1 @@
-(function(n,o,t){"use strict";const a=o.findByName("Chat"),p=t.after("render",a.prototype,(r,e)=>{e?.props?.onTapCopyText&&t.instead("onTapCopyText",e.props,()=>{})});return n.onUnload=p,n})({},vendetta.metro,vendetta.patcher);
+(function(n,s,e){"use strict";const a=s.findByProps("MessagesHandlers"),d=e.after("MessagesHandlers",a,(o,t)=>{t?.handleCopyText&&e.instead("handleCopyText",t,()=>{})});return n.onUnload=d,n})({},vendetta.metro,vendetta.patcher);

@@ -1,1 +1,1 @@
-(function(n,t,e){"use strict";const o=e.instead("setCommunicationModeOn",t.ReactNative.NativeModules.AudioManager,()=>{});return n.onUnload=o,n})({},vendetta.metro.common,vendetta.patcher);
+(function(a,e,t){"use strict";const n=t.instead("setCommunicationModeOn",e.ReactNative.NativeModules.AudioManager===null?e.ReactNative.NativeModules.RTNAudioManager:e.ReactNative.NativeModules.AudioManager,()=>{});return a.onUnload=n,a})({},vendetta.metro.common,vendetta.patcher);
